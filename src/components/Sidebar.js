@@ -1,10 +1,11 @@
-import { Navbar, Search } from "./";
+import { Chats, Navbar, Search } from "./";
 
 const Sidebar = () => {
   return (
     <div className="sidebar">
       <Navbar />
-      {/* <Search /> */}
+      <Search />
+      <Chats />
     </div>
   );
 };

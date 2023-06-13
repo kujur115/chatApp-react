@@ -132,6 +132,47 @@ code {
   border: none;
   cursor: pointer;
 }
+.search {
+  border-bottom: 1px solid gray;
+}
+.search .searchForm {
+  padding: 10px;
+}
+.search .searchForm input {
+  border: none;
+  background-color: transparent;
+  color: white;
+  outline: none;
+}
+.search .searchForm input::placeholder {
+  color: lightgray;
+}
+.userChat {
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: white;
+  cursor: pointer;
+}
+.userChat:hover {
+  background-color: #2f2d52;
+}
+.userChat img {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+.userChat .userChatInfo span {
+  font-size: 18px;
+  font-weight: 500;
+}
+.userChat .userChatInfo p {
+  font-size: 14px;
+  color: lightgray;
+}
+
 /* Chat Component */
 .chat {
   flex: 2;
