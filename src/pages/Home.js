@@ -1,10 +1,14 @@
+import { Sidebar, Chat } from "../components";
 
 function Home() {
-    return (
-      <div className="Home">
-        App Page
+  return (
+    <div className="home">
+      <div className="homeContainer">
+        <Sidebar />
+        <Chat />
       </div>
-    );
-  }
-  
-  export default Home;
+    </div>
+  );
+}
+
+export default Home;
