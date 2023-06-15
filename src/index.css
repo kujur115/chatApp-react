@@ -200,7 +200,7 @@ code {
   background-color: #ddddf7;
   padding: 10px;
   height: calc(100% - 160px);
-  overflow: scroll;
+  overflow-y: scroll;
 }
 .messages .message {
   display: flex;
@@ -235,13 +235,13 @@ code {
   width: 50%;
 }
 
-.messages .owner{
+.messages .owner {
   flex-direction: row-reverse;
 }
-.owner .messageContent{
+.owner .messageContent {
   align-items: flex-end;
 }
-.owner .messageContent p{
+.owner .messageContent p {
   background-color: #8da4f1;
   color: white;
   border-radius: 10px 0 10px 10px;
