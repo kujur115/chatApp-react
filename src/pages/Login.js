@@ -2,8 +2,8 @@ const Login = () => {
   return (
     <div className="formContainer">
       <div className="formWrapper">
-        <sapn className="Logo">Messenger App</sapn>
-        <sapn className="title"> </sapn>
+        <span className="Logo">Messenger App</span>
+        <span className="title"> </span>
         <form>
           <input type="email" placeholder="Email" />
           <input type="password" placeholder="Password" />

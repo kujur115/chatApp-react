@@ -3,10 +3,12 @@ import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { auth, db, storage } from "../firebase";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { doc, setDoc } from "firebase/firestore";
+import { useNavigate } from "react-router-dom";
 // import { useState } from "react";
 
 const Register = () => {
   // const [upload, setUpload] = useState(0);
+  const naviagte = useNavigate();
   const handleSubmit = async (e) => {
     e.preventDefault();
     const displayName = e.target[0].value;
@@ -28,6 +30,7 @@ const Register = () => {
         (snapshot) => {
           const progress =
             (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          console.info("upload progress", progress);
         },
         (error) => {
           console.log("Upload Error", error);
@@ -48,6 +51,7 @@ const Register = () => {
                 photoURL: downloadURL,
               });
               await setDoc(doc(db, "userChats", response.user.uid), {});
+              naviagte("/");
             };
             handleUpdate();
           });
