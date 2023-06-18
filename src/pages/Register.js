@@ -3,12 +3,12 @@ import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { auth, db, storage } from "../firebase";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { doc, setDoc } from "firebase/firestore";
-import { useNavigate } from "react-router-dom";
-// import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useState } from "react";
 
 const Register = () => {
-  // const [upload, setUpload] = useState(0);
-  const naviagte = useNavigate();
+  const [err, setErr] = useState(false);
+  const navigate = useNavigate();
   const handleSubmit = async (e) => {
     e.preventDefault();
     const displayName = e.target[0].value;
@@ -33,6 +33,7 @@ const Register = () => {
           console.info("upload progress", progress);
         },
         (error) => {
+          setErr(true);
           console.log("Upload Error", error);
         },
         () => {
@@ -51,13 +52,14 @@ const Register = () => {
                 photoURL: downloadURL,
               });
               await setDoc(doc(db, "userChats", response.user.uid), {});
-              naviagte("/");
+              navigate("/");
             };
             handleUpdate();
           });
         }
       );
     } catch (error) {
+      setErr(true);
       console.log("error", error);
     }
   };
@@ -76,8 +78,11 @@ const Register = () => {
             <span>Add an avatar</span>
           </label>
           <button>Sign Up</button>
+          {err && <span>Something went wrong!</span>}
         </form>
-        <p>Have aa account? Login</p>
+        <p>
+          Have aa account? <Link to="/login">Login</Link>{" "}
+        </p>
       </div>
     </div>
   );
