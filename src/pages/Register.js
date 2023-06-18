@@ -1,9 +1,12 @@
 import AddAvatar from "../images/addAvatar.png";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
-import { auth, storage } from "../firebase";
+import { auth, db, storage } from "../firebase";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+import { doc, setDoc } from "firebase/firestore";
+// import { useState } from "react";
 
 const Register = () => {
+  // const [upload, setUpload] = useState(0);
   const handleSubmit = async (e) => {
     e.preventDefault();
     const displayName = e.target[0].value;
@@ -20,24 +23,31 @@ const Register = () => {
 
       const uploadTask = uploadBytesResumable(storageRef, file);
 
-      // Register three observers:
-      // 1. 'state_changed' observer, called any time the state changes
-      // 2. Error observer, called on failure
-      // 3. Completion observer, called on successful completion
       uploadTask.on(
+        "state_changed",
+        (snapshot) => {
+          const progress =
+            (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        },
         (error) => {
-          console.log(error);
+          console.log("Upload Error", error);
         },
         () => {
-          // Handle successful uploads on complete
-          // For instance, get the download URL: https://firebasestorage.googleapis.com/...
+          console.log("Upload Complete");
           getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-            // console.log("File available at", downloadURL);
             const handleUpdate = async () => {
               await updateProfile(response.user, {
                 displayName,
                 photoURL: downloadURL,
               });
+
+              await setDoc(doc(db, "users", response.user.uid), {
+                uid: response.user.uid,
+                displayName,
+                email,
+                photoURL: downloadURL,
+              });
+              await setDoc(doc(db, "userChats", response.user.uid), {});
             };
             handleUpdate();
           });
@@ -50,8 +60,8 @@ const Register = () => {
   return (
     <div className="formContainer">
       <div className="formWrapper">
-        <sapn className="Logo">Messenger App</sapn>
-        <sapn className="title">Register </sapn>
+        <span className="Logo">Messenger App</span>
+        <span className="title">Register </span>
         <form onSubmit={handleSubmit}>
           <input type="text" placeholder="Name" />
           <input type="email" placeholder="Email" />
