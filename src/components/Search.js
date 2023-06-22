@@ -1,11 +1,23 @@
-import { useState } from "react";
-import { collection, getDocs, query, where } from "firebase/firestore";
+import { useContext, useState } from "react";
+import {
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  query,
+  serverTimestamp,
+  setDoc,
+  updateDoc,
+  where,
+} from "firebase/firestore";
 import { db } from "../firebase";
+import { AuthContext } from "../context/AuthContext";
 
 const Search = () => {
   const [username, setUsername] = useState("");
   const [userfound, setUserFound] = useState(null);
   const [err, setErr] = useState(false);
+  const { User } = useContext(AuthContext);
   const handleKey = (e) => {
     e.code === "Enter" && handleSearch();
   };
@@ -21,7 +33,7 @@ const Search = () => {
       // console.log("Query Snapshot:", querSnapshot); // Debug statement
 
       querSnapshot.forEach((doc) => {
-        // console.log("Document Data:", doc.data()); // Debug statement
+        console.log("Document Data:", doc.data()); // Debug statement
         setUserFound(doc.data());
       });
     } catch (error) {
@@ -30,7 +42,45 @@ const Search = () => {
     }
   };
 
-  const handleSelect = () => {};
+  const handleSelect = async () => {
+    const combinedId =
+      User.uid > userfound.uid
+        ? User.uid + userfound.uid
+        : userfound.uid + User.uid;
+    console.log("combinedId", combinedId);
+    try {
+      const resp = await getDoc(doc(db, "chats", combinedId));
+      console.log("resp", resp);
+      if (resp) {
+        await setDoc(doc(db, "chats", combinedId), {
+          messages: [],
+        });
+        // console.log("chatsss", chatsss);
+        await updateDoc(doc(db, "userChats", User.uid), {
+          [combinedId + ".userInfo"]: {
+            uid: userfound.uid,
+            displayName: userfound.displayName,
+            photoURL: userfound.photoURL,
+          },
+          [combinedId + ".date"]: serverTimestamp(),
+        });
+        // console.log("UserChatsss", UserChatsss);
+        await updateDoc(doc(db, "userChats", userfound.uid), {
+          [combinedId + ".userInfo"]: {
+            uid: User.uid,
+            displayName: User.displayName,
+            photoURL: User.photoURL,
+          },
+          [combinedId + ".date"]: serverTimestamp(),
+        });
+        // console.log("chatsssUser", chatsssUser);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+    setUserFound(null);
+    setUsername("");
+  };
 
   return (
     <div className="search">
@@ -40,6 +90,7 @@ const Search = () => {
           placeholder="find a user"
           onChange={(e) => setUsername(e.target.value)}
           onKeyDown={handleKey}
+          value={username}
         />
       </div>
       {err && <span>User not found!</span>}
