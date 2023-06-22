@@ -42,7 +42,7 @@ const Search = () => {
     }
   };
 
-  const handleSelect = async () => {
+  const handleSelect = async (userfound) => {
     const combinedId =
       User.uid > userfound.uid
         ? User.uid + userfound.uid
@@ -51,7 +51,7 @@ const Search = () => {
     try {
       const resp = await getDoc(doc(db, "chats", combinedId));
       console.log("resp", resp);
-      if (resp) {
+      if (!resp.exists()) {
         await setDoc(doc(db, "chats", combinedId), {
           messages: [],
         });
@@ -95,11 +95,11 @@ const Search = () => {
       </div>
       {err && <span>User not found!</span>}
       {userfound && (
-        <div className="userChat" onClick={handleSelect}>
+        <div className="userChat" onClick={() => handleSelect(userfound)}>
           <img src={userfound.photoURL} alt={userfound.displayName} />
           <div className="userChatInfo">
             <span>{userfound.displayName}</span>
-            <p>Hello</p>
+            <p>{userfound.lastMessage?.text}</p>
           </div>
         </div>
       )}
