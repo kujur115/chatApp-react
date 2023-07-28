@@ -15,7 +15,8 @@ code {
 /* Register / Sign-in component */
 .formContainer {
   background-color: #a7bcff;
-  height: 100vh;
+  min-height: 100vh;
+  width: auto;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -81,6 +82,7 @@ code {
 .home {
   background-color: #a7bcff;
   height: 100vh;
+  width: auto;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -88,8 +90,8 @@ code {
 .homeContainer {
   border: 1px solid white;
   border-radius: 10px;
-  width: 75%;
-  height: 80%;
+  width: 90%;
+  height: 90%;
   display: flex;
   overflow: hidden;
 }
@@ -134,11 +136,14 @@ code {
 }
 .search {
   border-bottom: 1px solid gray;
+  background: rgb(33, 33, 114);
 }
 .search .searchForm {
   padding: 10px;
+  color: lightgray;
 }
 .search .searchForm input {
+  margin-left: 3px;
   border: none;
   background-color: transparent;
   color: white;
@@ -146,6 +151,25 @@ code {
 }
 .search .searchForm input::placeholder {
   color: lightgray;
+}
+.chats {
+  position: relative;
+}
+.coversations {
+  color: whitesmoke;
+  padding: 10px 10px 0 10px;
+  display: flex;
+  justify-content: space-between;
+}
+.AllUsers {
+  position: absolute;
+  width: 50%;
+  background: #a7bcff;
+  z-index: 99;
+  right: 10px;
+  top: 30px;
+  border-radius: 4px;
+  overflow: hidden;
 }
 .userChat {
   padding: 10px;
@@ -171,6 +195,14 @@ code {
 .userChat .userChatInfo p {
   font-size: 14px;
   color: lightgray;
+}
+.searchedUser {
+  position: absolute;
+  width: 30%;
+  background: rgb(33, 33, 114);
+  z-index: 99;
+  border-radius: 0 0 10px 10px;
+  /* border: 2px solid navy; */
 }
 
 /* Chat Component */
@@ -233,6 +265,7 @@ code {
 }
 .message .messageContent img {
   width: 50%;
+  border-radius: 10px;
 }
 
 .messages .owner {

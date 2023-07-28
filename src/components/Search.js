@@ -85,6 +85,7 @@ const Search = () => {
   return (
     <div className="search">
       <div className="searchForm">
+        <i className="fa-solid fa-magnifying-glass"></i>
         <input
           type="text"
           placeholder="find a user"
@@ -95,11 +96,13 @@ const Search = () => {
       </div>
       {err && <span>User not found!</span>}
       {userfound && (
-        <div className="userChat" onClick={() => handleSelect(userfound)}>
-          <img src={userfound.photoURL} alt={userfound.displayName} />
-          <div className="userChatInfo">
-            <span>{userfound.displayName}</span>
-            <p>{userfound.lastMessage?.text}</p>
+        <div className="searchedUser">
+          <div className="userChat" onClick={() => handleSelect(userfound)}>
+            <img src={userfound.photoURL} alt={userfound.displayName} />
+            <div className="userChatInfo">
+              <span>{userfound.displayName}</span>
+              <p>{userfound.lastMessage?.text}</p>
+            </div>
           </div>
         </div>
       )}
