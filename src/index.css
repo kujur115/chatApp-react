@@ -133,6 +133,8 @@ code {
   font-size: 10px;
   border: none;
   cursor: pointer;
+  padding: 5px 10px;
+  border-radius: 2px;
 }
 .search {
   border-bottom: 1px solid gray;
@@ -155,11 +157,14 @@ code {
 .chats {
   position: relative;
 }
-.coversations {
+.conversations {
   color: whitesmoke;
   padding: 10px 10px 0 10px;
   display: flex;
   justify-content: space-between;
+}
+.xmark {
+  color: red;
 }
 .AllUsers {
   position: absolute;
@@ -314,4 +319,8 @@ code {
   color: white;
   background-color: #8da4f1;
   cursor: pointer;
+}
+
+.err{
+  color: red;
 }

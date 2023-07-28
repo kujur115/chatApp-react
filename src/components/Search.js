@@ -18,44 +18,57 @@ const Search = () => {
   const [userfound, setUserFound] = useState(null);
   const [err, setErr] = useState(false);
   const { User } = useContext(AuthContext);
+
+  // Function to handle pressing the Enter key in the search input
   const handleKey = (e) => {
     e.code === "Enter" && handleSearch();
   };
+
+  // Function to handle the user search
   const handleSearch = async () => {
+    // Create a query to find the user by display name
     const q = query(
       collection(db, "users"),
       where("displayName", "==", username)
     );
 
     try {
-      // console.log("Query:", q); // Debug statement
-      const querSnapshot = await getDocs(q);
-      // console.log("Query Snapshot:", querSnapshot); // Debug statement
+      const querySnapshot = await getDocs(q);
 
-      querSnapshot.forEach((doc) => {
-        console.log("Document Data:", doc.data()); // Debug statement
-        setUserFound(doc.data());
-      });
+      // If the user is found, update the state with the found user data
+      if (!querySnapshot.empty) {
+        const userDoc = querySnapshot.docs[0];
+        setUserFound(userDoc.data());
+        setErr(false);
+      } else {
+        // If the user is not found, display an error message
+        setUserFound(null);
+        setErr(true);
+      }
     } catch (error) {
       setErr(true);
       console.log("Error:", error);
     }
   };
 
+  // Function to handle selecting the found user and initiating a chat
   const handleSelect = async (userfound) => {
     const combinedId =
       User.uid > userfound.uid
         ? User.uid + userfound.uid
         : userfound.uid + User.uid;
-    console.log("combinedId", combinedId);
+
     try {
-      const resp = await getDoc(doc(db, "chats", combinedId));
-      console.log("resp", resp);
-      if (!resp.exists()) {
+      // Check if the chat already exists
+      const chatDoc = await getDoc(doc(db, "chats", combinedId));
+
+      if (!chatDoc.exists()) {
+        // If the chat does not exist, create it with empty messages
         await setDoc(doc(db, "chats", combinedId), {
           messages: [],
         });
-        // console.log("chatsss", chatsss);
+
+        // Update the userChats document for the authenticated user with the new chat
         await updateDoc(doc(db, "userChats", User.uid), {
           [combinedId + ".userInfo"]: {
             uid: userfound.uid,
@@ -64,7 +77,8 @@ const Search = () => {
           },
           [combinedId + ".date"]: serverTimestamp(),
         });
-        // console.log("UserChatsss", UserChatsss);
+
+        // Update the userChats document for the found user with the new chat
         await updateDoc(doc(db, "userChats", userfound.uid), {
           [combinedId + ".userInfo"]: {
             uid: User.uid,
@@ -73,17 +87,19 @@ const Search = () => {
           },
           [combinedId + ".date"]: serverTimestamp(),
         });
-        // console.log("chatsssUser", chatsssUser);
       }
     } catch (error) {
       console.log(error);
     }
+
+    // Clear the search input and reset the found user state
     setUserFound(null);
     setUsername("");
   };
 
   return (
     <div className="search">
+      {/* Search input */}
       <div className="searchForm">
         <i className="fa-solid fa-magnifying-glass"></i>
         <input
@@ -94,7 +110,11 @@ const Search = () => {
           value={username}
         />
       </div>
+
+      {/* Error message when the user is not found */}
       {err && <span>User not found!</span>}
+
+      {/* Display the found user if available */}
       {userfound && (
         <div className="searchedUser">
           <div className="userChat" onClick={() => handleSelect(userfound)}>
@@ -109,4 +129,5 @@ const Search = () => {
     </div>
   );
 };
+
 export default Search;
