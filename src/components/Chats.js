@@ -8,6 +8,7 @@ import { AllUsers } from ".";
 const Chats = () => {
   const [chats, setChats] = useState({});
   const [newConv, setNewConv] = useState(false);
+  const [selectedUser, setSelectedUser] = useState(null);
   const { User } = useContext(AuthContext);
   const { dispatch } = useContext(ChatContext);
 
@@ -32,6 +33,7 @@ const Chats = () => {
   // Handle user selection and dispatch the selected user to the ChatContext.
   const handleSelect = (user) => {
     dispatch({ type: "USER_CHANGE", payload: user });
+    setSelectedUser(user);
   };
 
   // Handle the state for showing/hiding the AllUsers component.
@@ -46,7 +48,7 @@ const Chats = () => {
       <div className="conversations">
         <i className="fa-solid fa-comments"> Conversations</i>
         <i
-          className={`fa-solid ${
+          className={`fa-solid pointer ${
             newConv ? "xmark fa-rectangle-xmark" : "fa-plus"
           }`}
           onClick={handleNewChat}
@@ -62,7 +64,9 @@ const Chats = () => {
           ?.sort((a, b) => b[1].date - a[1].date)
           .map((chat, index) => (
             <div
-              className="userChat"
+              className={`userChat ${
+                selectedUser === chat[1].userInfo && "selected"
+              }`}
               key={index}
               onClick={() => handleSelect(chat[1].userInfo)}
             >

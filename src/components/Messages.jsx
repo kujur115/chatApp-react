@@ -22,7 +22,10 @@ const Messages = () => {
     };
 
     // Subscribe to changes in the chat document
-    const unsubscribe = onSnapshot(doc(db, "chats", data.chatId), handleSnapshot);
+    const unsubscribe = onSnapshot(
+      doc(db, "chats", data.chatId),
+      handleSnapshot
+    );
 
     // Clean up the subscription when the component is unmounted
     return () => {

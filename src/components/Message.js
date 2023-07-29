@@ -10,7 +10,6 @@ const Message = ({ message }) => {
   const ref = useRef();
 
   // Scroll the message into view when a new message is received or sent
-  console.log(message);
   useEffect(() => {
     ref.current?.scrollIntoView({ behavior: "smooth" });
   }, [message]);
@@ -48,7 +47,7 @@ const Message = ({ message }) => {
           }
           alt=""
         />
-        <span>{time(message.date.seconds)}</span>
+        <span className="time">{time(message.date.seconds)}</span>
         {/* Replace this timestamp with the actual timestamp */}
       </div>
       <div className="messageContent">
